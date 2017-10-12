@@ -14,14 +14,27 @@ angular.module('crudApp').controller('UserController',
         self.removeUser = removeUser;
         self.editUser = editUser;
         self.reset = reset;
-
         self.successMessage = '';
         self.errorMessage = '';
         self.done = false;
 
         self.onlyIntegers = /^\d+$/;
         self.onlyNumbers = /^\d+([,.]\d+)?$/;
-
+        
+        $scope.Init = function ()
+        {
+        	console.log('Init called');
+        	$scope.currentPage = 1;
+        	$scope.pageSize = 5;
+        	//$scope.pageCount = pageCount();
+        }
+        
+        function pageCount()
+        {
+        	console.log('Page count calculated.');
+        	return Math.ceil(getAllUsers().length/$scope.pageSize);
+        }
+        
         function submit() {
             console.log('Submitting');
             if (self.user.id === undefined || self.user.id === null) {
@@ -89,7 +102,14 @@ angular.module('crudApp').controller('UserController',
 
 
         function getAllUsers(){
-            return UserService.getAllUsers();
+        	var users = UserService.getAllUsers();
+        	
+        	var oldPageCount = $scope.pageCount;
+        	$scope.pageCount = Math.ceil(users.length/$scope.pageSize);
+        	if (oldPageCount>$scope.pageCount)
+        		$scope.currentPage = $scope.currentPage-1;
+        	
+            return users;
         }
 
         function editUser(id) {

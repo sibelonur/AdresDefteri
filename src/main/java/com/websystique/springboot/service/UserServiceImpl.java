@@ -5,6 +5,8 @@ import java.util.List;
 import com.websystique.springboot.model.User;
 import com.websystique.springboot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +47,10 @@ public class UserServiceImpl implements UserService{
 		return userRepository.findAll();
 	}
 
+	public Page<User> findAllUsers(Pageable page){
+		return userRepository.findAll(page);
+	}
+	
 	public boolean isUserExist(User user) {
 		return findByName(user.getName()) != null;
 	}

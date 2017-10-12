@@ -5,6 +5,9 @@ import com.websystique.springboot.model.User;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 public interface UserService {
 	
 	User findById(Long id);
@@ -21,5 +24,8 @@ public interface UserService {
 
 	List<User> findAllUsers();
 
+	Page<User> findAllUsers(Pageable page);
+	
 	boolean isUserExist(User user);
+	
 }

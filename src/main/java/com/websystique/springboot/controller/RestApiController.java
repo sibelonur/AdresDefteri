@@ -30,6 +30,7 @@ public class RestApiController {
 
 	// -------------------Retrieve All Users---------------------------------------------
 
+	@SuppressWarnings({"rawtypes" })
 	@RequestMapping(value = "/user/", method = RequestMethod.GET)
 	public ResponseEntity<List<User>> listAllUsers() {
 		List<User> users = userService.findAllUsers();
@@ -42,6 +43,7 @@ public class RestApiController {
 
 	// -------------------Retrieve Single User------------------------------------------
 
+	@SuppressWarnings({"rawtypes" })
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getUser(@PathVariable("id") long id) {
 		logger.info("Fetching User with id {}", id);
@@ -56,6 +58,7 @@ public class RestApiController {
 
 	// -------------------Create a User-------------------------------------------
 
+	@SuppressWarnings({ "rawtypes"})
 	@RequestMapping(value = "/user/", method = RequestMethod.POST)
 	public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
 		logger.info("Creating User : {}", user);
@@ -63,7 +66,7 @@ public class RestApiController {
 		if (userService.isUserExist(user)) {
 			logger.error("Unable to create. A User with name {} already exist", user.getName());
 			return new ResponseEntity(new CustomErrorType("Unable to create. A User with name " + 
-			user.getName() + " already exist."),HttpStatus.CONFLICT);
+			user.getSurname() + " already exist."),HttpStatus.CONFLICT);
 		}
 		userService.saveUser(user);
 
@@ -74,6 +77,7 @@ public class RestApiController {
 
 	// ------------------- Update a User ------------------------------------------------
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateUser(@PathVariable("id") long id, @RequestBody User user) {
 		logger.info("Updating User with id {}", id);
@@ -87,8 +91,9 @@ public class RestApiController {
 		}
 
 		currentUser.setName(user.getName());
-		currentUser.setAge(user.getAge());
-		currentUser.setSalary(user.getSalary());
+		currentUser.setSurname(user.getSurname());
+		currentUser.setAddress(user.getAddress());
+	    currentUser.setTck_no(user.getTck_no());
 
 		userService.updateUser(currentUser);
 		return new ResponseEntity<User>(currentUser, HttpStatus.OK);
@@ -96,6 +101,7 @@ public class RestApiController {
 
 	// ------------------- Delete a User-----------------------------------------
 
+	@SuppressWarnings({"rawtypes" })
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteUser(@PathVariable("id") long id) {
 		logger.info("Fetching & Deleting User with id {}", id);
